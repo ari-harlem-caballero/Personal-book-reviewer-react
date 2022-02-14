@@ -7,6 +7,11 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+import AuthPage from './AuthPage';
+import BookList from './Components/Books/BookList';
+import BookDetail from './Components/Books/BookDetail';
+import CreateBook from './Components/Books/CreateBook';
+import ProfileDetail from './Components/Profiles/ProfileDetail';
 
 import './App.css';
 
@@ -52,11 +57,48 @@ function App() {
       </header>
       <main>
         {/* switch->route->ternary */}
-        {/* if user, redirect to bookList, if no call AuthPage */}
-        {/* if user, render bookList, if no call AuthPage */}
-        {/* if user, render bookDetail, if no call AuthPage */}
-        {/* if user, render Create, if no call AuthPage */}
-        {/* if user, render Profile, if no call AuthPage */}
+        <Switch>
+          <Route exact path="/">
+            {/* if user, redirect to bookList, if no call AuthPage */}
+            {
+              currentUser
+                ? <Redirect to="/books" />
+                : <AuthPage setCurrentUser={setCurrentUser} />
+            }
+          </Route>
+          <Route exact path="/books">
+            {/* if user, render bookList, if no call AuthPage */}
+            {
+              currentUser
+                ? <BookList />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route exact path="/books/:id">
+            {/* if user, render bookDetail, if no call AuthPage */}
+            {
+              currentUser
+                ? <BookDetail />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route exact path="/create">
+            {/* if user, render Create, if no call AuthPage */}
+            {
+              currentUser
+                ? <CreateBook />
+                : <Redirect to="/" />
+            }
+          </Route>
+          <Route exact path="/profile">
+            {/* if user, render Profile, if no call AuthPage */}
+            {
+              currentUser
+                ? <ProfileDetail />
+                : <Redirect to="/" />
+            }
+          </Route>
+        </Switch>
       </main>
     </div>
   );
