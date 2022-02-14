@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUser } from './services/fetch-utils';
+import { getUser, logout } from './services/fetch-utils';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,12 +12,43 @@ import './App.css';
 
 function App() {
   //track user's state
+  const [currentUser, setCurrentUser] = useState('');
   //add useEffect to user to fetch user, inject into userState on load
+  useEffect(() => {
+    async function fetchUser() {
+      const data = getUser();
+
+      setCurrentUser(data);
+    }
+
+    fetchUser();
+  }, []);
   // handleLogout (call func, clear state)
+  async function handleLogout() {
+    await logout();
+
+    currentUser('');
+  }
+
   return (
     <div className="App">
       <header className="header">
         {/* if user: render links (book-list, create, userProfile) */}
+        {
+          currentUser &&
+          <>
+            <NavLink to="/books">
+              Books
+            </NavLink>
+            <NavLink to="/create">
+              Create Book
+            </NavLink>
+            <NavLink to="/profile">
+              Profile
+            </NavLink>
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        }
       </header>
       <main>
         {/* switch->route->ternary */}
